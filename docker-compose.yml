@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:  
+  mongodb:
+    image: mongo:latest    
+    container_name: mongo_QuickAssist
+    restart: unless-stopped    
+    volumes:      
+      - ./mongo_data:/data/db    
+    environment:      
+      MONGO_INITDB_ROOT_USERNAME: terry      
+      MONGO_INITDB_ROOT_PASSWORD: password123    
+    ports:      
+      - "27018:27017"
