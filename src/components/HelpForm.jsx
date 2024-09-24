@@ -1,73 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import config from '../config'; // Adjust the path based on your folder structure
 
 const HelpForm = () => {
-  const location = useLocation();
-  const [formData, setFormData] = useState({
-    name: '',
-    issue: '',
-    location: ''
-  });
+  const [room, setRoom] = useState(null);
+  const [issueDescription, setIssueDescription] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const roomLocation = query.get('location');
-    if (roomLocation) {
-      setFormData((prev) => ({ ...prev, location: roomLocation }));
-    }
-  }, [location]);
+    const fetchRoomData = async () => {
+      const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
+      try {
+        const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
+        const data = await response.json();
+        setRoom(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
+    };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    fetchRoomData();
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form data:', formData);
-    // Logic to submit form data to the server
+    if (issueDescription.trim()) {
+      const roomId = window.location.pathname.split("/")[2];
+      const requestData = { roomId, issueDescription };
+
+      try {
+        const response = await fetch(`${config.API_BASE_URL}/api/requests`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (response.ok) {
+          setSubmitted(true);
+        }
+      } catch (error) {
+        console.error("Error submitting request:", error);
+      }
+    }
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (submitted) return <div>Thank you! Your request has been submitted.</div>;
 
   return (
-    <div className="container mt-5">
-      <h1 className="text-center mb-4">Request Help</h1>
-      <form onSubmit={handleSubmit} className="needs-validation" noValidate>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="issue" className="form-label">Issue</label>
+    <div className="help-form">
+      <h1>Get help in {room.name}</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="issueDescription">How can we help?</label>
           <textarea
-            className="form-control"
-            id="issue"
-            name="issue"
-            rows="3"
-            value={formData.issue}
-            onChange={handleChange}
+            id="issueDescription"
+            value={issueDescription}
+            onChange={(e) => setIssueDescription(e.target.value)}
+            rows="4"
             required
           ></textarea>
         </div>
-        <div className="mb-3">
-          <label htmlFor="location" className="form-label">Location</label>
-          <input
-            type="text"
-            className="form-control"
-            id="location"
-            name="location"
-            value={formData.location}
-            readOnly
-          />
-        </div>
-        <button type="submit" className="btn btn-primary w-100">Submit</button>
+        <button type="submit">Submit</button>
       </form>
+      <a href={room.wikiLink} target="_blank" rel="noopener noreferrer">
+        Visit {room.name}'s Wiki for self-help
+      </a>
     </div>
   );
 };

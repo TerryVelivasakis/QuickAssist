@@ -1,0 +1,105 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+
+app = Flask(__name__)
+CORS(app)  # Allows Cross-Origin requests
+
+def convertRoomID(roomname)
+    return roomname.strip().replace(" ", "-").lower()
+
+# MongoDB setup
+client = MongoClient('mongodb://terry:password123@localhost:27017/')
+db = client['supportApp']
+rooms_collection = db['rooms']
+requests_collection = db['requests']
+
+# Helper function to convert ObjectId to string
+def convert_objectid_to_string(doc):
+    if '_id' in doc:
+        doc['_id'] = str(doc['_id'])
+    return doc
+
+# GET room by ID
+@app.route('/api/rooms/<room_id>', methods=['GET'])
+def get_room(room_id):
+    try:
+        room = rooms_collection.find_one({'_id': ObjectId(room_id)})
+        if room:
+            room = convert_objectid_to_string(room)
+            return jsonify({
+                'name': room['name'],
+                'wikiLink': room['wikiLink'],
+                'id': room['_id']
+            })
+        else:
+            return jsonify({'error': 'Room not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# POST help request
+@app.route('/api/requests', methods=['POST'])
+def create_request():
+    try:
+        data = request.get_json()
+        room_id = data['roomId']
+        issue_description = data['issueDescription']
+        
+        new_request = {
+            'roomId': room_id,
+            'issueDescription': issue_description,
+            'createdAt': data.get('createdAt', ''),
+        }
+        requests_collection.insert_one(new_request)
+        return jsonify({'message': 'Request submitted successfully'}), 201
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# GET all rooms
+@app.route('/api/rooms', methods=['GET'])
+def get_rooms():
+    rooms = list(rooms_collection.find({}))
+    rooms = [convert_objectid_to_string(room) for room in rooms]
+    return jsonify(rooms)
+
+# POST a new room
+@app.route('/api/rooms', methods=['POST'])
+def create_room():
+    data = request.get_json()
+    # Create a roomId by stripping whitespace and converting to lowercase
+    room_id = data['name'].strip().replace(" ", "-").lower()
+    
+    new_room = {
+        'roomId': room_id,  # Use the generated roomId
+        'name': data['name'],
+        'wikiLink': data['wikiLink']
+    }
+    
+    # Insert the new room into the collection
+    rooms_collection.insert_one(new_room)
+    
+    return get_rooms()  # Return the updated room list
+
+# PUT to update a room
+@app.route('/api/rooms/<room_id>', methods=['PUT'])
+def update_room(room_id):
+    data = request.get_json()
+    rooms_collection.update_one(
+        {'roomId': room_id},
+        {'$set': {
+            'name': data['name'],
+            'wikiLink': data['wikiLink']
+        }}
+    )
+    return get_rooms()  # Return the updated room list
+
+
+# DELETE a room
+@app.route('/api/rooms/<room_id>', methods=['DELETE'])
+def delete_room(room_id):
+    rooms_collection.delete_one({'roomId': room_id})
+    return get_rooms()  # Return the updated room list
+
+if __name__ == '__main__':
+    app.run(debug=True)
