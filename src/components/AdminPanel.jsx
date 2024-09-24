@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import config from '../config'; // Adjust the path
+import QRCode from 'react-qr-code';
+import config from '../config'; // Adjust the path based on your folder structure
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AdminPanel = () => {
   const [rooms, setRooms] = useState([]);
   const [roomName, setRoomName] = useState('');
   const [wikiLink, setWikiLink] = useState('');
   const [editRoomId, setEditRoomId] = useState(null);
+  const [qrRoom, setQrRoom] = useState(null); // State for the room to generate QR code
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -70,6 +73,18 @@ const AdminPanel = () => {
     }
   };
 
+  // Handle Generate QR Code Button Click
+  const handleGenerateQR = (roomName) => {
+    var qrData = `${config.APP_BASE_URL}/room/${roomName}`;
+    console.log("roomName", qrData);
+    setQrRoom(qrData); // Set the room name for QR code generation
+  };
+
+  // Handle close QR code
+  const handleCloseQR = () => {
+    setQrRoom(null); // Close the QR code
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="mb-4">Admin Panel - Manage Rooms</h1>
@@ -102,6 +117,21 @@ const AdminPanel = () => {
         </button>
       </form>
 
+      {qrRoom && (
+        <div className="mt-4 text-center">
+          <h3>QR Code for Room Help Page</h3>
+          <QRCode
+            value={`${qrRoom}`} // Generate QR for room help page
+            size={200}
+          />
+          <div className="mt-2">
+            <button className="btn btn-danger" onClick={handleCloseQR}>
+              Close QR Code
+            </button>
+          </div>
+        </div>
+      )}
+
       <h2>Existing Rooms</h2>
       <ul className="list-group">
         {rooms.map(room => (
@@ -110,6 +140,7 @@ const AdminPanel = () => {
               {room.name} - <a href={room.wikiLink} target="_blank" rel="noopener noreferrer">Wiki</a>
             </span>
             <span>
+              <button onClick={() => handleGenerateQR(room.roomId)} className="btn btn-primary btn-sm">QR Code</button>
               <button onClick={() => handleEdit(room)} className="btn btn-warning btn-sm me-2">Edit</button>
               <button onClick={() => handleDelete(room._id)} className="btn btn-danger btn-sm">Delete</button>
             </span>
