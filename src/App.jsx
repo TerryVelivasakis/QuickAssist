@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HelpForm from './components/HelpForm';  // Adjust the path as necessary
 import AdminPanel from './components/AdminPanel';  // Adjust the path as necessary
+import Dashboard from './components/Dashboard';  // Adjust the path as necessary
 
 const App = () => {
   return (
@@ -13,6 +14,9 @@ const App = () => {
           
           {/* Route for the admin panel */}
           <Route path="/admin" element={<AdminPanel />} />
+
+          {/* Route for the Dashboard */}
+          <Route path="/dash" element={<Dashboard />} />          
           
           {/* Default route or 404 if needed */}
           <Route path="*" element={<div>404 Not Found</div>} />
