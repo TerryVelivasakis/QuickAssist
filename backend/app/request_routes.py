@@ -2,11 +2,10 @@ from flask import Blueprint, request, jsonify
 from bson import ObjectId 
 from datetime import datetime, timezone
 from pymongo import MongoClient
-from .extensions import socketio  # Import the initialized SocketIO instance
+from .extensions import socketio, db  # Import the initialized SocketIO instance
 
-# Set up MongoDB connection
-client = MongoClient('mongodb://terry:password123@localhost:27017/')
-db = client['supportApp']
+
+
 requests_collection = db['requests']
 
 # Blueprint for request-related routes

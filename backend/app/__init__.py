@@ -1,9 +1,12 @@
 from flask import Flask
 from flask_cors import CORS
-from .extensions import socketio
+from .extensions import socketio, db
 from .admin_routes import admin_bp
 from .request_routes import requests_bp
 from .dashboard_routes import dashboard_bp
+import os
+from dotenv import load_dotenv
+
 
 def create_app():
     app = Flask(__name__)
@@ -22,4 +25,4 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     # Run the app using socketio instead of app.run
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)

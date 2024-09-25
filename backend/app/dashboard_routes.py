@@ -1,11 +1,8 @@
 # dashboard_routes.py
 from flask import Blueprint, jsonify
 from pymongo import MongoClient
-from datetime import datetime
+from . import db
 
-# MongoDB setup
-client = MongoClient('mongodb://terry:password123@localhost:27017/')
-db = client['supportApp']
 requests_collection = db['requests']
 
 # Blueprint for dashboard-related routes
@@ -25,3 +22,14 @@ def get_requests():
         return jsonify(requests), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+@dashboard_bp.route('/api/test', methods=['GET'])
+def test_mongo():
+    print("Hi Mom!")
+    try:
+        db.command("ping")  # Ping MongoDB
+        return jsonify({"message": "MongoDB connected!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

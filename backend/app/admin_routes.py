@@ -1,9 +1,8 @@
 from flask import Blueprint, request, jsonify
 from pymongo import MongoClient
+from .extensions import db  # Import db from extensions
 
-# Set up MongoDB connection
-client = MongoClient('mongodb://terry:password123@localhost:27017/')
-db = client['supportApp']
+
 rooms_collection = db['rooms']
 
 def CreateRoomData(room_name, wiki_link):
