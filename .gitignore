@@ -27,3 +27,5 @@ test.*
 # Database
 /mongo_data
 venv
+
+*.sh

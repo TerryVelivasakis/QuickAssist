@@ -10,7 +10,8 @@ from dotenv import load_dotenv
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)  # Enable Cross-Origin requests
+    CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]}})
+    
 
     # Register the blueprints
     app.register_blueprint(admin_bp)
