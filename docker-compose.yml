@@ -1,14 +1,51 @@
 #version: '3.8'
 
-services:  
+services:
   mongodb:
-    image: mongo:latest    
-    container_name: mongo_QuickAssist
-    restart: unless-stopped    
-    volumes:      
-      - ./mongo_data:/data/db    
-    environment:      
-      MONGO_INITDB_ROOT_USERNAME: terry      
-      MONGO_INITDB_ROOT_PASSWORD: password123    
-    ports:      
-      - "27018:27017"
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=terry
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+  flask-app:
+    build:
+      context: ./flask
+    container_name: flask-app
+    environment:
+      - MONGO_URI=mongodb://terry:password123@mongodb:27017
+      - MONGO_CLIENT=supportApp
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    volumes:
+      - ./flask:/app
+    command: python run.py
+    networks:
+      - app-network
+
+  react-app:
+    build: ./react
+    container_name: react-app
+    ports:
+      - "80:80"  # Make sure the React app is listening on port 80 inside the container
+    depends_on:
+      - flask-app
+    volumes:
+      - ./react:/app
+    networks:
+      - app-network
+
+volumes:
+  mongo-data:
+
+networks:
+  app-network:
+    driver: bridge
