@@ -21,8 +21,3 @@ client = MongoClient(mongo_uri)
 
 # Access the specific database (if you want to access a specific DB, include it in the URI)
 db = client['supportApp']  # Use this if the database is part of the URI string
-
-
-@app.route('/api/rooms/<room_id>', methods=['OPTIONS'])
-def options():
-    return make_response('', 204)
