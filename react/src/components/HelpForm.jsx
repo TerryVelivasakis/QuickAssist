@@ -12,7 +12,7 @@ const HelpForm = () => {
 
   useEffect(() => {
     const fetchRoomData = async () => {
-       document.body.style.backgroundColor = '#7c7d80';
+       //document.body.style.backgroundColor = '#7c7d80';
       const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
@@ -66,10 +66,11 @@ const HelpForm = () => {
   if (loading) return <div className="text-center">Loading...</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
   if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.<br/><br/> Someone will be there soon to help!</div>;
-
+//dark = 7c7d80 light = d3d7d6
   return (
-    <body  style={{background: "#7c7d80"}}>
-    <div className="container mt-5">
+    <body  >
+      
+      <div className="pt-5" style={{backgroundColor:"#d3d7d6"}}> 
       <div style={{ textAlign: 'center' }}>
         <img src={sofwerxQA} alt="SofwerxQuickAssist logo"         style={{ 
           width: '90%', 
@@ -79,33 +80,37 @@ const HelpForm = () => {
           margin: '0 auto' 
         }} />
       </div>
-      <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <h3><label htmlFor="issueDescription" className="form-label bold">How can we help?</label></h3>
-          <textarea
-            id="issueDescription"
-            className="form-control"
-            value={issueDescription}
-            onChange={(e) => setIssueDescription(e.target.value)}
-            rows="6"
-          />
+      <div className='pt-3' style={{backgroundColor: '#7c7d80'}}>
+        <div className='mt-5 container'>
+          <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3" >
+                <h3><label htmlFor="issueDescription" className="form-label bold">How can we help?</label></h3>
+                <textarea
+                  id="issueDescription"
+                  className="form-control"
+                  value={issueDescription}
+                  onChange={(e) => setIssueDescription(e.target.value)}
+                  rows="6"
+                />
+              </div>
+              <div style={{textAlign: 'center'}}>
+                <button 
+                  type="submit" 
+                  className="btn btn-lg" 
+                  style={{ backgroundColor: '#ED6622', color: '#28282A', fontWeight: 'bold'}}>
+                  Request the NerdHerd
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="mt-3" style={{ visibility: 'hidden'}}>
+            <a href={room.wikiLink} className="btn btn-link" target="_blank" rel="noopener noreferrer">
+              Visit {room.name}'s Wiki for self-help
+            </a>
+          </div>
         </div>
-        <div style={{textAlign: 'center'}}>
-        <button 
-  type="submit" 
-  className="btn btn-lg" 
-  style={{ backgroundColor: '#ED6622', color: '#28282A', fontWeight: 'bold'}}>
-  Request the NerdHerd
-</button>
-</div>
-      </form>
-      <div className="mt-3" style={{ visibility: 'hidden'}}>
-        <a href={room.wikiLink} className="btn btn-link" target="_blank" rel="noopener noreferrer">
-          Visit {room.name}'s Wiki for self-help
-        </a>
       </div>
-    </div>
     </body>
   );
 };
