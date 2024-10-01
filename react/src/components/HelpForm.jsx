@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import config from '../config'; // Adjust the path based on your folder structure
 import 'bootstrap/dist/css/bootstrap.min.css';
+import sofwerxQA from '../img/sofwerxQA.png';
 
 const HelpForm = () => {
   const [room, setRoom] = useState(null);
@@ -11,6 +12,7 @@ const HelpForm = () => {
 
   useEffect(() => {
     const fetchRoomData = async () => {
+      document.body.style.backgroundColor = '#adb5bd';
       const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
@@ -66,8 +68,18 @@ const HelpForm = () => {
   if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.</div>;
 
   return (
+    <body  style={{backgroundColor: '#adb5bd'}}>
     <div className="container mt-5">
-      <h1 className="mb-4">Get help in {room.name}</h1>
+      <div style={{ textAlign: 'center' }}>
+        <img src={sofwerxQA} alt="SofwerxQuickAssist logo"         style={{ 
+          width: '90%', 
+          maxWidth: '100%', 
+          height: 'auto', 
+          display: 'block', 
+          margin: '0 auto' 
+        }} />
+      </div>
+      <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="issueDescription" className="form-label">How can we help?</label>
@@ -79,14 +91,15 @@ const HelpForm = () => {
             rows="4"
           />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn btn-primary">Call the NerdHerd</button>
       </form>
-      <div className="mt-3">
+      <div className="mt-3" style={{ visibility: 'hidden' }}>
         <a href={room.wikiLink} className="btn btn-link" target="_blank" rel="noopener noreferrer">
           Visit {room.name}'s Wiki for self-help
         </a>
       </div>
     </div>
+    </body>
   );
 };
 
