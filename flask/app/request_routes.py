@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from .extensions import socketio, db, slack_uri  # Import the initialized SocketIO instance
 import requests
 import random
-
+print(slack_uri)
 requests_collection = db['requests']
 
 # Blueprint for request-related routes
