@@ -82,18 +82,25 @@ const HelpForm = () => {
       <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="issueDescription" className="form-label">How can we help?</label>
+          <label htmlFor="issueDescription" className="form-label bold">How can we help?</label>
           <textarea
             id="issueDescription"
             className="form-control"
             value={issueDescription}
             onChange={(e) => setIssueDescription(e.target.value)}
-            rows="4"
+            rows="6"
           />
         </div>
-        <button type="submit" className="btn btn-primary">Call the NerdHerd</button>
+        <div style={{textAlign: 'center'}}>
+        <button 
+  type="submit" 
+  className="btn btn-lg" 
+  style={{ backgroundColor: '#fd7e14', color: 'black', fontWeight: 'bold'}}>
+  Call the NerdHerd
+</button>
+</div>
       </form>
-      <div className="mt-3" style={{ visibility: 'hidden' }}>
+      <div className="mt-3" style={{ visibility: 'hidden'}}>
         <a href={room.wikiLink} className="btn btn-link" target="_blank" rel="noopener noreferrer">
           Visit {room.name}'s Wiki for self-help
         </a>
