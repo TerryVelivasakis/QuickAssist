@@ -65,7 +65,7 @@ const HelpForm = () => {
 
   if (loading) return <div className="text-center">Loading...</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
-  if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.</div>;
+  if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.<br/><br/> Someone will be there soon to help!</div>;
 
   return (
     <body  style={{backgroundColor: '#adb5bd'}}>
