@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import config from '../config'; // Adjust the path based on your folder structure
 import 'bootstrap/dist/css/bootstrap.min.css';
-import sofwerxQA from '../img/sofwerxQA.png';
+import sofwerxQA from '../img/sofwerx.png';
 
 const HelpForm = () => {
   const [room, setRoom] = useState(null);
@@ -12,7 +12,7 @@ const HelpForm = () => {
 
   useEffect(() => {
     const fetchRoomData = async () => {
-       //document.body.style.backgroundColor = '#7c7d80';
+       document.body.style.backgroundColor = '#d3d7d6';
       const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
@@ -68,9 +68,9 @@ const HelpForm = () => {
   if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.<br/><br/> Someone will be there soon to help!</div>;
 //dark = 7c7d80 light = d3d7d6
   return (
-    <body  >
+    <body  style={{backgroundColor:"#d3d7d6"}}>
       
-      <div className="pt-5" style={{backgroundColor:"#d3d7d6"}}> 
+      <div className="pt-3" style={{backgroundColor:"#d3d7d6"}}> 
       <div style={{ textAlign: 'center' }}>
         <img src={sofwerxQA} alt="SofwerxQuickAssist logo"         style={{ 
           width: '90%', 
@@ -79,10 +79,15 @@ const HelpForm = () => {
           display: 'block', 
           margin: '0 auto' 
         }} />
+        </div>
+        <div className='mt-3 pt-1 pb-1' style={{backgroundColor:'#28282A', fontWeight:'900', color:"#e9edf0", textAlign: 'center'}}><h1 style={{letterSpacing:"5px"}}>QuickAssist</h1>
+        <h4 className="text-uppercase text-decoration-none fw-bold" style={{color:"#ED6622" }}>{room.name}</h4>
+          
+          </div>
       </div>
-      <div className='pt-3' style={{backgroundColor: '#7c7d80'}}>
-        <div className='mt-5 container'>
-          <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
+      <div className='pt-1' style={{backgroundColor: '#d3d7d6'}}>
+        <div className='mt-2 container'>
+          
             <form onSubmit={handleSubmit}>
               <div className="mb-3" >
                 <h3><label htmlFor="issueDescription" className="form-label bold">How can we help?</label></h3>
@@ -110,7 +115,7 @@ const HelpForm = () => {
             </a>
           </div>
         </div>
-      </div>
+    
     </body>
   );
 };
