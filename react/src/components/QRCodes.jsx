@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { QRCode } from 'qrcode.react'; // Import the QR code library
+import QRCode from 'qrcode.react'; // Import the QR code library
 import config from '../config'; // Adjust the path based on your folder structure
 import 'bootstrap/dist/css/bootstrap.min.css';
 
