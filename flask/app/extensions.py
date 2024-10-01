@@ -18,6 +18,9 @@ print(slack_uri)
 if not mongo_uri:
     raise ValueError("MONGO_URI is not set in the environment variables")
 
+if not slack_uri:
+    raise ValueError("SLACK_URI is not set in the environment variables")
+
 # Create MongoClient using the URI
 client = MongoClient(mongo_uri)
 
