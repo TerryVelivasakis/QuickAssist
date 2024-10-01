@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HelpForm from './components/HelpForm';  // Adjust the path as necessary
 import AdminPanel from './components/AdminPanel';  // Adjust the path as necessary
 import Dashboard from './components/Dashboard';  // Adjust the path as necessary
-import { QRCodes } from './components/QRCodes';  // Adjust the path as necessary
+import QRCodes from './components/QRCodes';  // Adjust the path as necessary
 
 const App = () => {
   return (
