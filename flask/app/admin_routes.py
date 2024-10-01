@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from pymongo import MongoClient
 from .extensions import db  # Import db from extensions
+from bson import ObjectId
 
 
 rooms_collection = db['rooms']
@@ -60,8 +61,12 @@ def update_room(room_id):
 # DELETE a room
 @admin_bp.route('/api/rooms/<room_id>', methods=['DELETE'])
 def delete_room(room_id):
-    rooms_collection.delete_one({'roomId': room_id})
-    return get_rooms()
+    try:
+        # Convert room_id to ObjectId and delete the document by _id
+        rooms_collection.delete_one({'_id': ObjectId(room_id)})
+        return get_rooms()  # Return the updated list of rooms
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # GET all rooms (admin needs this too)
 @admin_bp.route('/api/rooms', methods=['GET'])
