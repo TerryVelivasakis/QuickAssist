@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from bson import ObjectId 
 from datetime import datetime, timezone
 from pymongo import MongoClient
-from .extensions import socketio, db  # Import the initialized SocketIO instance
+from .extensions import socketio, db, slack_uri  # Import the initialized SocketIO instance
 import requests
 import random
 
@@ -33,7 +33,7 @@ def create_request():
         socketio.emit('new_request', new_request)
 
         #Slack notification
-        webhook_url = 'https://hooks.slack.com/services/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'
+    
         openers = [
             "Did you try plugging it in? No? Thought so.",
             "I guess we'll be turning it off and on again... for the 100th time.",
@@ -49,7 +49,7 @@ def create_request():
 
         message = f"{random.choice(openers)}\n\nRoom ID: {room_id}\nIssue Description: {issue_description}"
         payload = {"text": message}
-        response = requests.post(webhook_url, json=payload)
+        response = requests.post(slack_uri json=payload)
         if response.status_code != 200:
             raise ValueError(f"Request to Slack returned an error {response.status_code}, the response is:\n{response.text}")
 
