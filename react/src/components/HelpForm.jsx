@@ -12,7 +12,7 @@ const HelpForm = () => {
 
   useEffect(() => {
     const fetchRoomData = async () => {
-      document.body.style.backgroundColor = '#adb5bd';
+      document.body.style.backgroundColor = '#7c7d80';
       const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
@@ -95,7 +95,7 @@ const HelpForm = () => {
         <button 
   type="submit" 
   className="btn btn-lg" 
-  style={{ backgroundColor: '#fd7e14', color: 'black', fontWeight: 'bold'}}>
+  style={{ backgroundColor: '#ED6622', color: '#28282A', fontWeight: 'bold'}}>
   Call the NerdHerd
 </button>
 </div>
