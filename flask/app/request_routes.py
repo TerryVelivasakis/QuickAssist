@@ -33,7 +33,7 @@ def create_request():
         socketio.emit('new_request', new_request)
 
         #Slack notification
-        webhook_url = 'https://hooks.slack.com/services/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'
+        webhook_url = 'https://hooks.slack.com/services/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'
         openers = [
             "Did you try plugging it in? No? Thought so.",
             "I guess we'll be turning it off and on again... for the 100th time.",
