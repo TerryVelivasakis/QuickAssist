@@ -12,7 +12,7 @@ const HelpForm = () => {
 
   useEffect(() => {
     const fetchRoomData = async () => {
-      document.body.style.backgroundColor = '#7c7d80';
+       document.body.style.backgroundColor = '#7c7d80';
       const roomId = window.location.pathname.split("/")[2]; // Assuming room ID is in the URL
       try {
         const response = await fetch(`${config.API_BASE_URL}/api/rooms/${roomId}`);
@@ -68,7 +68,7 @@ const HelpForm = () => {
   if (submitted) return <div className="alert alert-success">Thank you! Your request has been submitted.<br/><br/> Someone will be there soon to help!</div>;
 
   return (
-    <body  style={{backgroundColor: '#adb5bd'}}>
+    <body  style={{background: "#7c7d80"}}>
     <div className="container mt-5">
       <div style={{ textAlign: 'center' }}>
         <img src={sofwerxQA} alt="SofwerxQuickAssist logo"         style={{ 
