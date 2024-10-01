@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_cors import cross_origin
 from pymongo import MongoClient
 from .extensions import db  # Import db from extensions
 from bson import ObjectId
@@ -33,30 +34,38 @@ def create_room():
 
 # PUT to update a room
 @admin_bp.route('/api/rooms/<room_id>', methods=['PUT'])
+@cross_origin()  # Ensure CORS is enabled for this route
 def update_room(room_id):
     data = request.get_json()
 
-    # Check if the name has changed to update roomId, otherwise keep it the same
-    existing_room = rooms_collection.find_one({'roomId': room_id})
+    try:
+        # Convert room_id to ObjectId
+        existing_room = rooms_collection.find_one({'_id': ObjectId(room_id)})
 
-    if existing_room and data['name'] != existing_room['name']:
-        RoomData = CreateRoomData(data['name'], data['wikiLink'])
-        updated_roomId = RoomData['roomId']  # fixed typo to use roomId
-    else:
-        RoomData = existing_room
-        updated_roomId = room_id
+        if not existing_room:
+            return jsonify({'error': 'Room not found'}), 404
 
-    # Update the room with new data, only changing the roomId if the name has changed
-    rooms_collection.update_one(
-        {'roomId': room_id},
-        {'$set': {
-            'roomId': updated_roomId,  # Update roomId if necessary
-            'name': RoomData['name'],
-            'wikiLink': RoomData['wikiLink']
-        }}
-    )
+        # Check if the name has changed to update roomId, otherwise keep it the same
+        if data['name'] != existing_room['name']:
+            RoomData = CreateRoomData(data['name'], data['wikiLink'])
+            updated_roomId = RoomData['roomId']  # Update roomId if name has changed
+        else:
+            RoomData = existing_room
+            updated_roomId = existing_room['roomId']  # Keep original roomId
+
+        # Update the room with new data
+        rooms_collection.update_one(
+            {'_id': ObjectId(room_id)},
+            {'$set': {
+                'roomId': updated_roomId,
+                'name': RoomData['name'],
+                'wikiLink': RoomData['wikiLink']
+            }}
+        )
+        return get_rooms()
     
-    return get_rooms()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # DELETE a room
 @admin_bp.route('/api/rooms/<room_id>', methods=['DELETE'])
