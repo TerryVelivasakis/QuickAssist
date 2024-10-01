@@ -82,7 +82,7 @@ const HelpForm = () => {
       <h1 className="mb-3" style={{ textAlign: 'center' }}>{room.name}</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="issueDescription" className="form-label bold">How can we help?</label>
+          <h3><label htmlFor="issueDescription" className="form-label bold">How can we help?</label></h3>
           <textarea
             id="issueDescription"
             className="form-control"
@@ -96,7 +96,7 @@ const HelpForm = () => {
   type="submit" 
   className="btn btn-lg" 
   style={{ backgroundColor: '#ED6622', color: '#28282A', fontWeight: 'bold'}}>
-  Call the NerdHerd
+  Request the NerdHerd
 </button>
 </div>
       </form>
