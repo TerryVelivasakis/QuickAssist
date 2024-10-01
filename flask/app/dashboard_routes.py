@@ -2,6 +2,7 @@
 from flask import Blueprint, jsonify
 from pymongo import MongoClient
 from . import db
+from bson import ObjectId
 
 requests_collection = db['requests']
 
