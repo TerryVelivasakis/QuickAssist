@@ -11,6 +11,7 @@ socketio = SocketIO()
 
 # Initialize MongoDB connection
 mongo_uri = os.getenv('MONGO_URI')
+slack_uri = os.getenv('SLACK_URI')
 
 # Ensure the environment variable was loaded correctly
 if not mongo_uri:
