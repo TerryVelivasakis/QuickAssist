@@ -4,12 +4,17 @@ import HelpForm from './components/HelpForm';  // Adjust the path as necessary
 import AdminPanel from './components/AdminPanel';  // Adjust the path as necessary
 import Dashboard from './components/Dashboard';  // Adjust the path as necessary
 import QRCodes from './components/QRCodes';  // Adjust the path as necessary
+import HomePage from './components/HomePage'; 
 
 const App = () => {
   return (
     <Router>
       <div className="App">
         <Routes>
+
+          {/* Route for the home page */}
+          <Route path="/" element={<HomePage />} />
+
           {/* Route for the help form (the room ID is part of the URL) */}
           <Route path="/room/:roomId" element={<HelpForm />} />
           

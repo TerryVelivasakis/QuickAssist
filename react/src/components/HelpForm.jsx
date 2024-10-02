@@ -74,7 +74,7 @@ const HelpForm = () => {
       <div style={{ textAlign: 'center' }}>
         <img src={sofwerxQA} alt="SofwerxQuickAssist logo"         style={{ 
           width: '90%', 
-          maxWidth: '100%', 
+          maxWidth: '480px', 
           height: 'auto', 
           display: 'block', 
           margin: '0 auto' 
