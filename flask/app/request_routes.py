@@ -5,7 +5,11 @@ from pymongo import MongoClient
 from .extensions import socketio, db, slack_uri  # Import the initialized SocketIO instance
 import requests
 import random
-print(slack_uri)
+import logging  # Import the logging module
+
+# Set up basic logging
+logging.basicConfig(level=logging.WARNING)  # You can adjust the log level as needed
+
 requests_collection = db['requests']
 
 # Blueprint for request-related routes
@@ -32,8 +36,7 @@ def create_request():
         # Emit a WebSocket event for the new request
         socketio.emit('new_request', new_request)
 
-        #Slack notification
-    
+        # Slack notification
         openers = [
             "Did you try plugging it in? No? Thought so.",
             "I guess we'll be turning it off and on again... for the 100th time.",
@@ -49,12 +52,17 @@ def create_request():
 
         message = f"{random.choice(openers)}\n\nRoom ID: {room_id}\nIssue Description: {issue_description}"
         payload = {"text": message}
-        response = requests.post(slack_uri, json=payload)
-        if response.status_code != 200:
-            raise ValueError(f"Request to Slack returned an error {response.status_code}, the response is:\n{response.text}")
-
+        
+        # Try sending the Slack notification
+        try:
+            response = requests.post(slack_uri, json=payload)
+            if response.status_code != 200:
+                logging.warning(f"Slack notification failed with status code {response.status_code}: {response.text}")
+        except Exception as slack_error:
+            logging.warning(f"Error sending Slack notification: {slack_error}")
 
         return jsonify({'message': 'Request submitted successfully'}), 201
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -75,7 +83,7 @@ def delete_request(request_id):
     try:
         # Convert the request ID to ObjectId and attempt to delete
         result = requests_collection.delete_one({'_id': ObjectId(request_id)})
-        
+
         if result.deleted_count == 1:
             # Emit the WebSocket event to notify other clients
             socketio.emit('request_deleted', {'_id': request_id})  # Notify frontend about the deletion
