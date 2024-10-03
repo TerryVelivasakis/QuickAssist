@@ -41,5 +41,5 @@ MONGO_CLIENT=supportApp
 ```
 Replace <username>, <password>, and <mongodb_server> with your MongoDB credentials and server details.
 
-###3. Build and Run with Docker
+### 3. Build and Run with Docker
 To run the app in Docker containers, use Docker Compose:
