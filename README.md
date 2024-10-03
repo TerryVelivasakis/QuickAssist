@@ -52,21 +52,21 @@ Once the containers are up, access the following:
 - Admin Panel: (http://localhost/admin)
 - QR Codes: (http://localhost/qrcodes)
 
-##Usage
-###Admin Panel
+## Usage
+### Admin Panel
 The admin panel allows you to manage rooms, generate QR codes, and monitor submitted requests. You can access the admin panel at /admin.
 
-###Dashboard
+### Dashboard
 The dashboard provides a high-level overview of all current help requests.
 
-###Submitting a Help Request
+### Submitting a Help Request
 Each room is associated with a unique QR code that users can scan. After scanning, users are redirected to a room-specific help request form. They can fill out their issue and submit it directly to the IT team.
 
-###Persistent Storage
+### Persistent Storage
 The MongoDB database used by QuickAssist stores all room data, requests, and user information. Data persistence is maintained via Docker volumes, ensuring that no data is lost when the containers are stopped or removed.
 
-###Automated Builds with Jenkins (Optional)
+### Automated Builds with Jenkins (Optional)
 You can automate builds using Jenkins with webhooks. The app is set up to rebuild the containers and update the application when there is a new push to the repository.
 
-###Contributing
+### Contributing
 If you would like to contribute to this project, feel free to open issues, submit pull requests, or suggest features.
